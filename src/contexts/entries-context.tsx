@@ -30,7 +30,8 @@ export function EntriesProvider({ children }: AuthPropTypes) {
 
   async function newEntry({ amount, description, date, type }: Entry) {
     try {
-      const url = 'http://localhost:3000/entries'
+      const url =
+        'https://balance-management-api-production.up.railway.app/entries'
       const body = {
         amount,
         description,
@@ -47,7 +48,8 @@ export function EntriesProvider({ children }: AuthPropTypes) {
   }
   async function listEntries() {
     try {
-      const url = 'http://localhost:3000/entries'
+      const url =
+        'https://balance-management-api-production.up.railway.app/entries'
 
       const response = await axios.get(url)
       setEntries(response.data)
@@ -57,7 +59,7 @@ export function EntriesProvider({ children }: AuthPropTypes) {
   }
   async function deleteEntry(id: string) {
     try {
-      const url = `http://localhost:3000/entries/${id}`
+      const url = `https://balance-management-api-production.up.railway.app/entries/${id}`
 
       await axios.delete(url)
       listEntries()

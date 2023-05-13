@@ -37,7 +37,8 @@ export function AuthProvider({ children }: AuthPropTypes) {
 
   async function signIn({ email, password }: SignInTypes) {
     try {
-      const url = 'http://localhost:3000/auth/login'
+      const url =
+        'https://balance-management-api-production.up.railway.app/auth/login'
       const body = {
         email,
         password,
@@ -62,7 +63,8 @@ export function AuthProvider({ children }: AuthPropTypes) {
 
   async function signUp(data: SignUpTypes) {
     try {
-      const url = 'http://localhost:3000/users'
+      const url =
+        'https://balance-management-api-production.up.railway.app/users'
       const body = {
         name: data.name,
         email: data.email,
@@ -84,7 +86,8 @@ export function AuthProvider({ children }: AuthPropTypes) {
   }
 
   async function getProfile(token: string) {
-    const url = 'http://localhost:3000/auth/profile'
+    const url =
+      'https://balance-management-api-production.up.railway.app/auth/profile'
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,

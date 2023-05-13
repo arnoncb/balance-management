@@ -22,6 +22,7 @@ export const TextInput = ({
   register,
   error,
 }: InputProps) => {
+  const message = `${error?.message}`
   return (
     <>
       <input
@@ -30,7 +31,7 @@ export const TextInput = ({
         className={InputStyles(error)}
         {...register(name)}
       />
-      {error?.message && <span className={ErrorStyle()}>{error?.message}</span>}
+      {error?.message && <span className={ErrorStyle()}>{message}</span>}
     </>
   )
 }
