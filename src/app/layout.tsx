@@ -1,11 +1,10 @@
-import "./globals.css"
-import { Inter } from "next/font/google"
-
-const inter = Inter({ subsets: ["latin"] })
+import React from 'react'
+import './globals.css'
+import { AuthProvider } from '@/contexts/auth-context'
 
 export const metadata = {
-  title: "e-Wallet",
-  description: "Manage your income",
+  title: 'e-Wallet',
+  description: 'Manage your income',
 }
 
 export default function RootLayout({
@@ -15,7 +14,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-body`}>{children}</body>
+      <body className={`font-body`}>
+        <AuthProvider>{children}</AuthProvider>
+      </body>
     </html>
   )
 }

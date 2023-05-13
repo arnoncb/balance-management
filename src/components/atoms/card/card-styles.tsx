@@ -1,14 +1,18 @@
 type StyleProps = {
-  minWidth?: string
+  width?: string
   padding?: string
+  height?: string
 }
 
-export const CardStyles = ({ minWidth, padding }: StyleProps) => {
+export const CardStyles = ({ width, height, padding }: StyleProps) => {
   return `
-  bg-white
-  max-w-[440px]
-  min-w-[${minWidth}px]
+  ${width}
+  ${height}
+  ${padding}
+  flex
+  flex-col
+  justify-center
+  bg-white  
   rounded-3xl
-  p-${padding}
   shadow-lg`
 }

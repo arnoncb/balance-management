@@ -1,16 +1,25 @@
-import { ReactNode } from "react"
-import { CardStyles } from "./card-styles"
+import { ReactNode } from 'react'
+import { CardStyles } from './card-styles'
 
 type CardProps = {
   children: ReactNode
-  minWidth?: string
+  width?: string
+  height?: string
   padding?: string
 }
 
 export const Card = ({
   children,
-  minWidth = "0",
-  padding = "16",
+  width,
+  height,
+  padding = 'p-7',
 }: CardProps) => {
-  return <div className={CardStyles({ minWidth, padding })}>{children}</div>
+  return (
+    <div
+      onClick={(e) => e.stopPropagation()}
+      className={CardStyles({ width, height, padding })}
+    >
+      {children}
+    </div>
+  )
 }

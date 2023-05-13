@@ -20,10 +20,3 @@ export const InputStyles = (
   }
   `
 }
-
-export const ErrorStyle = () => {
-  return `
-  text-xs
-  mt-[-8px]
-    `
-}

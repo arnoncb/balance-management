@@ -1,5 +1,5 @@
-import { ReactNode } from "react"
-import { HeaderStyles } from "./header-styles"
+import { ReactNode } from 'react'
+import { HeaderStyles } from './header-styles'
 
 type ButtonProps = {
   children: ReactNode

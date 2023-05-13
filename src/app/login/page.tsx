@@ -1,29 +1,17 @@
-import { Button } from "@/components/atoms/button/button-comp"
-import { LoginStyles as style } from "./styles"
-import { PageWrapper } from "@/components/atoms/page-wrapper/wrapper-comp"
-import { Card } from "@/components/atoms/card/card-comp"
-import { TextInput } from "@/components/atoms/text-input/input-comp"
+import { PageWrapper } from '@/components/atoms/page-wrapper/wrapper-comp'
+import LoginCard from '@/components/organisms/login-card/login-comp'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 
-export default function Home() {
+export default function Login() {
+  if (cookies().get('balanceManagementToken')) {
+    redirect('/')
+  }
   return (
-    <PageWrapper>
-      <Card>
-        <div className={style.head}>
-          <h1 className={style.appTitle}>e-Wallet</h1>
-          <h2 className={style.subtitle}>Manage your money</h2>
-        </div>
-        <div className={style.buttonsContainer}>
-          <Button compact>Sign up</Button>
-          <Button compact>Login</Button>
-        </div>
-        <form className={style.form}>
-          <TextInput placeholder="Full name" />
-          <TextInput placeholder="Email" />
-          <TextInput placeholder="Password" />
-          <TextInput placeholder="Confirm password" />
-          <Button type="submit">Get started</Button>
-        </form>
-      </Card>
-    </PageWrapper>
+    <div className={`flex h-screen`}>
+      <PageWrapper>
+        <LoginCard />
+      </PageWrapper>
+    </div>
   )
 }

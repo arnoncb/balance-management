@@ -1,0 +1,109 @@
+'use client'
+
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import { destroyCookie, parseCookies, setCookie } from 'nookies'
+import React, { createContext, useEffect, useState } from 'react'
+
+type SignInTypes = {
+  email: string
+  password: string
+}
+
+type SignUpTypes = {
+  name: string[]
+  email: string
+  password: string
+}
+
+type AuthTypes = {
+  user: string | null
+  isAuthenticated: boolean
+  signIn: (x: SignInTypes) => Promise<void>
+  signUp: (x: SignUpTypes) => Promise<void>
+  logOut: () => void
+}
+
+type AuthPropTypes = {
+  children: React.ReactNode
+}
+
+export const AuthContext = createContext({} as AuthTypes)
+
+export function AuthProvider({ children }: AuthPropTypes) {
+  const [user, setUser] = useState<string | null>(null)
+  const isAuthenticated = !!user
+  const router = useRouter()
+
+  async function signIn({ email, password }: SignInTypes) {
+    try {
+      const url = 'http://localhost:3000/auth/login'
+      const body = {
+        email,
+        password,
+      }
+      const response = await axios.post(url, body)
+
+      setCookie(
+        undefined,
+        'balanceManagementToken',
+        response.data.access_token,
+        {
+          maxAge: 60 * 60 * 48, // 2 days
+          // eslint-disable-next-line prettier/prettier
+        }
+      )
+      setUser(response.data.user)
+      router.push('/')
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function signUp(data: SignUpTypes) {
+    try {
+      const url = 'http://localhost:3000/users'
+      const body = {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      }
+
+      const response = await axios.post(url, body)
+      const { email, password } = response.data
+      signIn({ email, password })
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  async function logOut() {
+    destroyCookie(undefined, 'balanceManagementToken')
+    setUser(null)
+    router.push('/login')
+  }
+
+  async function getProfile(token: string) {
+    const url = 'http://localhost:3000/auth/profile'
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+    const response = await axios.get(url, config)
+    setUser(response.data.username)
+  }
+
+  useEffect(() => {
+    const { balanceManagementToken: token } = parseCookies()
+    if (token) getProfile(token)
+  }, [])
+
+  return (
+    <AuthContext.Provider
+      value={{ user, isAuthenticated, signIn, logOut, signUp }}
+    >
+      {children}
+    </AuthContext.Provider>
+  )
+}

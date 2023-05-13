@@ -1,19 +1,13 @@
-type StyleProps = {
-  compact: boolean
-}
-
 export const HeaderStyles = () => {
   return `
     flex
-    fixed
-    top-0
     items-center
     justify-between
     bg-zinc-900
-    w-screen
+    w-full
     text-sm
     px-8
-    h-[64px]
+    min-h-[64px]
     font-semibold
   `
 }

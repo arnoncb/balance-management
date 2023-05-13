@@ -5,19 +5,17 @@ import {
   Merge,
   UseFormRegister,
 } from 'react-hook-form'
-import { ErrorStyle, InputStyles } from './input-styles'
+import { InputStyles } from './input-styles'
 
 type InputProps = {
   placeholder: any
   error: FieldError | Merge<FieldError, FieldErrorsImpl<any>> | undefined
-  type: string
   name: string
   register: UseFormRegister<FieldValues>
 }
 
-export const TextInput = ({
+export const NumberInput = ({
   placeholder,
-  type,
   name,
   register,
   error,
@@ -25,12 +23,14 @@ export const TextInput = ({
   return (
     <>
       <input
-        type={type}
-        placeholder={placeholder}
+        placeholder={error ? error.message : placeholder}
         className={InputStyles(error)}
-        {...register(name)}
+        type="number"
+        step={0.01}
+        {...register(name, {
+          valueAsNumber: true,
+        })}
       />
-      {error?.message && <span className={ErrorStyle()}>{error?.message}</span>}
     </>
   )
 }

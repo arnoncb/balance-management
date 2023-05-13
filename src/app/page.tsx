@@ -1,27 +1,28 @@
-import { PageWrapper } from "@/components/atoms/page-wrapper/wrapper-comp"
-import { Header } from "@/components/molecules/header/header-comp"
-import { HomeStyles as style } from "./styles"
-import Avatar from "@/icons/profile-avatar.svg"
-import Logo from "@/icons/logo.svg"
-import Image from "next/image"
-import { Card } from "@/components/atoms/card/card-comp"
-import { InfoCard } from "@/components/molecules/info-card/card-comp"
+import { PageWrapper } from '@/components/atoms/page-wrapper/wrapper-comp'
+import { Header } from '@/components/molecules/header/header-comp'
+import Logo from '@/icons/logo.svg'
+import Image from 'next/image'
+import { ProfileButton } from '@/components/molecules/profile-button/profile-comp'
+import MainContent from '@/components/organisms/home-content/content-comp'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { EntriesProvider } from '@/contexts/entries-context'
 
 export default function Home() {
+  if (!cookies().get('balanceManagementToken')) {
+    redirect('/login')
+  }
   return (
-    <PageWrapper color="bg-zinc-800">
+    <div className={`flex flex-col h-screen`}>
       <Header>
-        <Image src={Logo} alt="App logo" />
-        <div className={style.profileContainer}>
-          <Image src={Avatar} alt="Avatar icon" />
-          <span className={style.profileLabel}>Arnon</span>
-        </div>
+        <Image className={`w-24`} src={Logo} alt="App logo" />
+        <ProfileButton />
       </Header>
-      <div className={`flex flex-col gap-4`}>
-        <InfoCard title="Balance" value={27700} />
-        <InfoCard title="Total income" value={37700} />
-        <InfoCard title="Total expense" value={10000} />
-      </div>
-    </PageWrapper>
+      <PageWrapper withNav>
+        <EntriesProvider>
+          <MainContent />
+        </EntriesProvider>
+      </PageWrapper>
+    </div>
   )
 }
