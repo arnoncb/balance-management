@@ -20,7 +20,7 @@ export const ProfileLabel = () => {
 
 export const OptionsBalloon = () => {
   return `
-  z-1000
+  z-50
   absolute
   top-[72px]
   whitespace-nowrap

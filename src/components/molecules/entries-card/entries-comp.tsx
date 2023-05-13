@@ -8,7 +8,7 @@ import { Modal } from '../modal/modal-comp'
 import { NewEntryDialog } from '@/components/organisms/new-entry-dialog/dialog-comp'
 
 type EntriesProps = {
-  entries:
+  entries?:
     | {
         amount: number
         description: string
@@ -59,19 +59,31 @@ export const EntriesCard = ({ entries }: EntriesProps) => {
     <>
       <Card width="grow" height="max-h-[70vh]">
         <span className={CardTitle()}>Entries</span>
-        <NavBar items={entryFilter} />
-        <div className={EntryList()}>
-          {entries
-            ?.filter(
-              // eslint-disable-next-line prettier/prettier
-              (entry) => entry.type === entriesFilter || entriesFilter === 'all'
-            )
-            .map((entry, index) => {
-              return (
-                <Entry key={`${index}-${entry.amount}`} item={entry}></Entry>
-              )
-            })}
-        </div>
+        {entries && entries?.length > 0 ? (
+          <>
+            <NavBar items={entryFilter} />
+            <div className={EntryList()}>
+              {entries
+                ?.filter(
+                  (entry) =>
+                    // eslint-disable-next-line prettier/prettier
+                    entry.type === entriesFilter || entriesFilter === 'all'
+                )
+                .map((entry, index) => {
+                  return (
+                    <Entry
+                      key={`${index}-${entry.amount}`}
+                      item={entry}
+                    ></Entry>
+                  )
+                })}
+            </div>
+          </>
+        ) : (
+          <span className="grow text-center m-8 font-semibold text-zinc-400">
+            No entries yet
+          </span>
+        )}
         <Button onClick={toggleModal}>New entry</Button>
       </Card>
       {modalVisibility && (

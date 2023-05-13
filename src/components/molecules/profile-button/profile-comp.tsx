@@ -13,6 +13,7 @@ import { AuthContext } from '@/contexts/auth-context'
 export const ProfileButton = () => {
   const [balloonVisibility, setBalloonVisibility] = useState(false)
   const { logOut, user } = useContext(AuthContext)
+  console.log(user)
 
   const toggleBalloon = () => {
     setBalloonVisibility((balloonVisibility) => !balloonVisibility)
@@ -21,7 +22,7 @@ export const ProfileButton = () => {
   return (
     <div className={ProfileContainer()} onClick={toggleBalloon}>
       <Image src={Avatar} alt="Avatar icon" />
-      <span className={ProfileLabel()}>{user}</span>
+      <span className={ProfileLabel()}>{user?.username}</span>
       {balloonVisibility && (
         <div className={OptionsBalloon()} onClick={logOut}>
           <span>Log out</span>

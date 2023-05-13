@@ -16,8 +16,14 @@ type SignUpTypes = {
   password: string
 }
 
+type User = {
+  username: string
+  sub: string
+  _id: string
+}
+
 type AuthTypes = {
-  user: string | null
+  user: User | null
   isAuthenticated: boolean
   signIn: (x: SignInTypes) => Promise<void>
   signUp: (x: SignUpTypes) => Promise<void>
@@ -31,7 +37,7 @@ type AuthPropTypes = {
 export const AuthContext = createContext({} as AuthTypes)
 
 export function AuthProvider({ children }: AuthPropTypes) {
-  const [user, setUser] = useState<string | null>(null)
+  const [user, setUser] = useState<User | null>(null)
   const isAuthenticated = !!user
   const router = useRouter()
 
@@ -54,7 +60,8 @@ export function AuthProvider({ children }: AuthPropTypes) {
           // eslint-disable-next-line prettier/prettier
         }
       )
-      setUser(response.data.user)
+      getProfile(response.data.access_token)
+      console.log(response.data)
       router.push('/')
     } catch (error) {
       console.log(error)
@@ -86,15 +93,20 @@ export function AuthProvider({ children }: AuthPropTypes) {
   }
 
   async function getProfile(token: string) {
-    const url =
-      'https://balance-management-api-production.up.railway.app/auth/profile'
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
+    try {
+      const url =
+        'https://balance-management-api-production.up.railway.app/auth/profile'
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+      const response = await axios.get(url, config)
+      setUser(response.data)
+      console.log(response.data)
+    } catch (error) {
+      console.log(error)
     }
-    const response = await axios.get(url, config)
-    setUser(response.data.username)
   }
 
   useEffect(() => {

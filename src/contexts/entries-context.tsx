@@ -1,7 +1,9 @@
 'use client'
 
 import axios from 'axios'
-import React, { createContext, useState } from 'react'
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import { AuthContext } from './auth-context'
+import { parseCookies } from 'nookies'
 
 type Entry = {
   amount: number
@@ -28,6 +30,9 @@ export const EntriesContext = createContext({} as EntriesTypes)
 export function EntriesProvider({ children }: AuthPropTypes) {
   const [entries, setEntries] = useState<Entry[]>([])
   const isEmpty = !!entries
+  const { user } = useContext(AuthContext)
+
+  console.log(user)
 
   async function newEntry({ amount, description, date, type }: Entry) {
     try {
@@ -38,10 +43,10 @@ export function EntriesProvider({ children }: AuthPropTypes) {
         description,
         date,
         type,
+        userId: user?.sub,
       }
 
-      const response = await axios.post(url, body)
-      console.log(response)
+      await axios.post(url, body)
       listEntries()
     } catch (error) {
       console.log(error)
@@ -50,12 +55,15 @@ export function EntriesProvider({ children }: AuthPropTypes) {
   async function listEntries() {
     try {
       const url =
-        'https://balance-management-api-production.up.railway.app/entries'
+        'https://balance-management-api-production.up.railway.app/entries/list'
 
-      const response = await axios.get(url)
+      const body = {
+        userId: user?.sub,
+      }
+      const response = await axios.post(url, body)
       setEntries(response.data)
     } catch (error) {
-      console.log('asd')
+      console.log(error)
     }
   }
   async function deleteEntry(id: string) {
@@ -68,6 +76,10 @@ export function EntriesProvider({ children }: AuthPropTypes) {
       console.log(error)
     }
   }
+  useEffect(() => {
+    const { balanceManagementToken: token } = parseCookies()
+    if (token) listEntries()
+  }, [user])
 
   return (
     <EntriesContext.Provider
