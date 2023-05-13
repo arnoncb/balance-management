@@ -8,6 +8,7 @@ type Entry = {
   description: string
   date: string
   type: string
+  _id: string
 }
 
 type EntriesTypes = {
